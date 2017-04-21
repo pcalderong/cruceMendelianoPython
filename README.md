@@ -8,3 +8,13 @@ PYTHON UBUNTU
     - Run > Run utils.py
 - Console:
     - python utils.py
+
+
+GIT
+===
+1. git clone https://github.com/pitoc8/cruceMendelianoPython.git
+2. git status
+3. git add <file>
+4. git commit -m "Message"
+5. git push
+6. git pull
