@@ -1,23 +1,27 @@
 # import numpy as np
 def createGametes(caract):
+    #["A", "a", "B", "b"]
     gametes = []
-    for f in caract:
-        for f2 in caract:
-            if (f.upper() != f2.upper()):
-                gameteTemp = f + f2
-                if gameteTemp not in gametes and gameteTemp[::-1] not in gametes:
+    for f in caract: # f = "A"
+        for f2 in caract: # f2 = "B"
+            if (f.upper() != f2.upper()): #f = "A" y f2 = "B" -> "B"
+                gameteTemp = f + f2 # gameteTemp = "AB"
+                if gameteTemp not in gametes and gameteTemp[::-1] not in gametes: # si no esta en la lista de ninguna forma (al derecho y al reves)
                     gametes.append(gameteTemp)
                     print gameteTemp
                     print
     return gametes
 
-def generateGametes(values):
-    gameteA = createGametes(values)
-    gameteB = createGametes(values)
+
+
+def generateGametes(value1, value2):
+    gameteA = createGametes(value1)
+    gameteB = createGametes(value2)
     totalCount = len(gameteA)*len(gameteB)
     matrix = createTable(gameteA, gameteB)
     listGenotypes = analyzeData(matrix)
     generateGenotypes(totalCount, listGenotypes)
+    # generateGenotypes(listGenotypes)
 
 def createTable(gameteA, gameteB):
     results=[]
@@ -32,7 +36,7 @@ def createTable(gameteA, gameteB):
         results.append([])
         print " {} | ".format(x),
         for y in gameteB:
-            tmp = ''.join(sorted(x + y))
+            tmp = ''.join(sorted(x + y))  # sort by capital letter -> to match alelo
             results[i].append(tmp)
             print " {} ".format(tmp),
         i+=1
@@ -53,6 +57,6 @@ def analyzeData(matrix):
 def generateGenotypes(n, listGenotypes):
     for v in listGenotypes:
         result = (listGenotypes[v] * 100) / n
-        print "Genotype for {} is {} %".format(v, result)
+        print "Genotype for {} is {}/{} or {}%".format(v, listGenotypes[v], n, result)
 
-generateGametes(["A", "a", "B", "b"])
+generateGametes(["A", "a", "B", "b"], ["A", "a", "B", "b"])
