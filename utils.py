@@ -10,19 +10,17 @@ def sort(string):
                 newString = newString + tmp[i+1] + tmp[i]
     return newString
 
-sort("BBaacc")
-
-def createGameteAux(mother):
+def createGameteAux(source):
     crossList = []
-    if len(mother) == 1:
-        return [mother]
-    elif len(mother) == 2:
-        if mother[0] == mother[1]:
-            return createGameteAux(mother[0])
+    if len(source) == 1:
+        return [source]
+    elif len(source) == 2:
+        if source[0] == source[1]:
+            return createGameteAux(source[0])
         else:
-            return [mother[0],mother[1]]
+            return [source[0],source[1]]
     else:
-        crossList = crossingValues(mother[:2], createGameteAux(mother[2:]))
+        crossList = crossingValues(source[:2], createGameteAux(source[2:]))
     return crossList
 
 def crossingValues(prefix, list):
@@ -33,5 +31,11 @@ def crossingValues(prefix, list):
             if gamete not in result:
                 result.append(gamete)
     return result
+
+def readFile(fileName):
+    test = open(fileName)
+    text = [line.rstrip('\n') for line in open(fileName, 'r')]
+    print test
+    return test
 
 
