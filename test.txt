@@ -1,6 +1,10 @@
 Phenotypes
 ==========
 A = green eyes
+a = brown eyes
 B = black hair
+b = blond hair
 C = bold
+c = no bold
 D = curly hair
+d = straight hair
