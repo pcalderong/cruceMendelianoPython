@@ -4,9 +4,18 @@ from mendelian import getPhenotypes
 from mendelian import generateGTmatrix
 
 def main():
-    print sys.argv
+    # Arguments from command line:
+    #   sys.argv[1] => path/to/file
+    #   sys.argv[2] => father
+    #   sys.argv[3] => mother
+
+    # Reads file from args
     text = readFile(sys.argv[1])
+
+    # Creates phenotype list
     phenotypes = getPhenotypes(text)
+
+    #Generate whole analysis
     mendelianResult = generateGTmatrix(sys.argv[2], sys.argv[3], phenotypes)
 
 

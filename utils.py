@@ -1,5 +1,5 @@
+#This sort is intended to have the genotypes displayed by letter, no matter if capital or not
 def sort(string):
-    #This sort is intended to have the genotypes displayed by letter, no matter if capital or not
     tmp = ''.join(sorted(string, key=str.lower))
     newString = ""
     for i in range(len(tmp)):
@@ -10,6 +10,7 @@ def sort(string):
                 newString = newString + tmp[i+1] + tmp[i]
     return newString
 
+# Recursive call to generate gametes previous to the crossing process
 def createGameteAux(source):
     crossList = []
     if len(source) == 1:
@@ -23,6 +24,7 @@ def createGameteAux(source):
         crossList = crossingValues(source[:2], createGameteAux(source[2:]))
     return crossList
 
+# Crossing process to make all the possible matches for each the father and the mother
 def crossingValues(prefix, list):
     result = []
     for p in prefix:
@@ -32,6 +34,7 @@ def crossingValues(prefix, list):
                 result.append(gamete)
     return result
 
+# Reads the file - Only full paths
 def readFile(fileName):
     test = open(fileName)
     text = [line.rstrip('\n') for line in open(fileName, 'r')]

@@ -1,9 +1,11 @@
 from utils import createGameteAux
 from utils import sort
 
+# Calls to Aux - Creates gametes for crossing process
 def createGamete(source):
    return createGameteAux(source)
 
+# Main method that handles all the mendelian crossing
 def generateGTmatrix(father, mother, phenotypes):
     gameteA = createGamete(father)
     gameteB = createGamete(mother)
@@ -12,6 +14,7 @@ def generateGTmatrix(father, mother, phenotypes):
     listGenotypes = analyzeData(matrix)
     generateGenotypes(totalCount, listGenotypes, phenotypes)
 
+# Creates mendelian table with results based on gameteA and gameteB
 def createTable(gameteA, gameteB):
     results=[]
     i = 0
@@ -25,13 +28,14 @@ def createTable(gameteA, gameteB):
         results.append([])
         print " {} | ".format(x),
         for y in gameteB:
-            tmp = sort(x + y)  # sort by capital letter -> to match alelo
+            tmp = sort(x + y)
             results[i].append(tmp)
             print " {} ".format(tmp),
         i+=1
         print
     return results
 
+# Generate list for genotype analysis
 def analyzeData(matrix):
     results = {}
     for row in matrix:
@@ -42,13 +46,14 @@ def analyzeData(matrix):
                 results[c] = 1
     return results
 
-
+# Displays analysis for genotype
 def generateGenotypes(n, listGenotypes, phenotypes):
     for v in listGenotypes:
         result = (listGenotypes[v] * 100) / n
         print "Genotype for {} is {}/{} or {}%".format(v, listGenotypes[v], n, result)
         analizePhenotypes(v, phenotypes)
 
+# Generates Phenotypes analysis for EACH genotype
 def analizePhenotypes(genotype, phenotype):
     last = ""
     result = ""
@@ -60,7 +65,8 @@ def analizePhenotypes(genotype, phenotype):
     print result + "\n"
     return result
 
-
+# Reads each line for the file, and sets a list with the corresponding characteristics.
+# Handle as a hash table
 def getPhenotypes(text):
     hashPhenotypes = {}
     for l in text:
