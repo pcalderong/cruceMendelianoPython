@@ -49,3 +49,4 @@ def generateGenotypes(n, listGenotypes):
         print "Genotype for {} is {}/{} or {}%".format(v, listGenotypes[v], n, result)
 
 generateGametes("AaBbCc", "AaBbCc")
+generateGametes("AaBb", "aabb")

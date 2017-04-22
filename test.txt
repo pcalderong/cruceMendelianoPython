@@ -1,0 +1,6 @@
+Phenotypes
+==========
+A = green eyes
+B = black hair
+C = bold
+D = curly hair
