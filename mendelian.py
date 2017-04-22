@@ -4,13 +4,13 @@ from utils import sort
 def createGamete(source):
    return createGameteAux(source)
 
-def generateGametes(father, mother):
+def generateGTmatrix(father, mother, phenotypes):
     gameteA = createGamete(father)
     gameteB = createGamete(mother)
     totalCount = len(gameteA)*len(gameteB)
     matrix = createTable(gameteA, gameteB)
     listGenotypes = analyzeData(matrix)
-    generateGenotypes(totalCount, listGenotypes)
+    generateGenotypes(totalCount, listGenotypes, phenotypes)
 
 def createTable(gameteA, gameteB):
     results=[]
@@ -43,10 +43,30 @@ def analyzeData(matrix):
     return results
 
 
-def generateGenotypes(n, listGenotypes):
+def generateGenotypes(n, listGenotypes, phenotypes):
     for v in listGenotypes:
         result = (listGenotypes[v] * 100) / n
         print "Genotype for {} is {}/{} or {}%".format(v, listGenotypes[v], n, result)
+        analizePhenotypes(v, phenotypes)
 
-generateGametes("AaBbCc", "AaBbCc")
-generateGametes("AaBb", "aabb")
+def analizePhenotypes(genotype, phenotype):
+    last = ""
+    result = ""
+    for g in genotype:
+        if last.upper() != g.upper():
+            result += phenotype[g]
+            result += " - "
+            last = g
+    print result + "\n"
+    return result
+
+
+def getPhenotypes(text):
+    hashPhenotypes = {}
+    for l in text:
+        if "Phenotypes" not in l and "===" not in l:
+            if "\n" in l[4:]:
+                hashPhenotypes[l[:1]] = l[4:-1]
+            else:
+                hashPhenotypes[l[:1]] = l[4:]
+    return hashPhenotypes
