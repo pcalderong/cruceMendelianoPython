@@ -1,62 +1,37 @@
-# import numpy as np
-def createGametes(caract):
-    #["A", "a", "B", "b"]
-    gametes = []
-    for f in caract: # f = "A"
-        for f2 in caract: # f2 = "B"
-            if (f.upper() != f2.upper()): #f = "A" y f2 = "B" -> "B"
-                gameteTemp = f + f2 # gameteTemp = "AB"
-                if gameteTemp not in gametes and gameteTemp[::-1] not in gametes: # si no esta en la lista de ninguna forma (al derecho y al reves)
-                    gametes.append(gameteTemp)
-                    print gameteTemp
-                    print
-    return gametes
+def sort(string):
+    #This sort is intended to have the genotypes displayed by letter, no matter if capital or not
+    tmp = ''.join(sorted(string, key=str.lower))
+    newString = ""
+    for i in range(len(tmp)):
+        if (i< len(tmp) -1):
+            if tmp[i] == tmp[i+1].upper():
+                newString = newString + tmp[i] + tmp[i+1]
+            elif tmp[i] == tmp[i+1].lower():
+                newString = newString + tmp[i+1] + tmp[i]
+    return newString
+
+sort("BBaacc")
+
+def createGameteAux(mother):
+    crossList = []
+    if len(mother) == 1:
+        return [mother]
+    elif len(mother) == 2:
+        if mother[0] == mother[1]:
+            return createGameteAux(mother[0])
+        else:
+            return [mother[0],mother[1]]
+    else:
+        crossList = crossingValues(mother[:2], createGameteAux(mother[2:]))
+    return crossList
+
+def crossingValues(prefix, list):
+    result = []
+    for p in prefix:
+        for l in list:
+            gamete = p + l
+            if gamete not in result:
+                result.append(gamete)
+    return result
 
 
-
-def generateGametes(value1, value2):
-    gameteA = createGametes(value1)
-    gameteB = createGametes(value2)
-    totalCount = len(gameteA)*len(gameteB)
-    matrix = createTable(gameteA, gameteB)
-    listGenotypes = analyzeData(matrix)
-    generateGenotypes(totalCount, listGenotypes)
-    # generateGenotypes(listGenotypes)
-
-def createTable(gameteA, gameteB):
-    results=[]
-    i = 0
-    j = 0
-    print "       ",
-    for item in gameteB:
-        print "  {}  ".format(item),
-    print
-    print "--------------------------------------"
-    for x in gameteA:
-        results.append([])
-        print " {} | ".format(x),
-        for y in gameteB:
-            tmp = ''.join(sorted(x + y))  # sort by capital letter -> to match alelo
-            results[i].append(tmp)
-            print " {} ".format(tmp),
-        i+=1
-        print
-    return results
-
-def analyzeData(matrix):
-    results = {}
-    for row in matrix:
-        for c in row:
-            if c in results:
-                results[c] += 1
-            else:
-                results[c] = 1
-    return results
-
-
-def generateGenotypes(n, listGenotypes):
-    for v in listGenotypes:
-        result = (listGenotypes[v] * 100) / n
-        print "Genotype for {} is {}/{} or {}%".format(v, listGenotypes[v], n, result)
-
-generateGametes(["A", "a", "B", "b"], ["A", "a", "B", "b"])
