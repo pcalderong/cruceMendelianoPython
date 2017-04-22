@@ -5,10 +5,12 @@ PYTHON UBUNTU
 - Install PyCharm Community Edition or make sure Python is installed on your computer.
 - PyCharm:
     - Importar el proyecto
-    - Run > Run utils.py
+    - Run > Run utils.py <file_path> father mother
+        - Example:
+            - $ python utils.py test.txt AaBbcc AABBCC
 - Console:
     - python utils.py
-
+- test.txt correspond to the phenotypes available according to the letter.
 
 GIT
 ===
