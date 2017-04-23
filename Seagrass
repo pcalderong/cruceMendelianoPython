@@ -1,0 +1,14 @@
+Phenotypes
+==========
+a = Flat leaf blades
+A = Cylindrical leaf blades
+b = Two blades per rhizome node
+B = Three baldes per rhizome node
+C = Cylindrical rhizome node
+c = Flat rhizome node
+d = Brown midrib
+D = Green midrib
+E = Brown veins
+e = Green veins
+F = Few stomas
+f = No stomas
