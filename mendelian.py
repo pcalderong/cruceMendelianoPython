@@ -71,8 +71,18 @@ def getPhenotypes(text):
     hashPhenotypes = {}
     for l in text:
         if "Phenotypes" not in l and "===" not in l:
-            if "\n" in l[4:]:
-                hashPhenotypes[l[:1]] = l[4:-1]
+            if l[:1] in hashPhenotypes:
+                print "Phenotype {} is already on the file".format(l[:1])
+                return None
+            elif not l[:1].isalpha():
+                print "Phenotype {} is not a letter".format(l[:1])
+                return None
+            elif len(l[4:]) > 3:
+                if "\n" in l[4:]:
+                    hashPhenotypes[l[:1]] = l[4:-1]
+                else:
+                    hashPhenotypes[l[:1]] = l[4:]
             else:
-                hashPhenotypes[l[:1]] = l[4:]
+                print "Phenotype description for {} is empty".format(l[:1])
+                return None
     return hashPhenotypes
