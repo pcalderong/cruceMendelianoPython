@@ -1,0 +1,12 @@
+Phenotypes
+==========
+a = Long phothorax
+A = Short phothorax
+b = Membraneous wings
+B = No membraneous wings
+C = Head elongated
+c = Head no elongated
+D = Transparent wings
+d = White wings
+E = Wings with hairs
+e = Wings without hairs
