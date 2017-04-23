@@ -1,0 +1,14 @@
+Phenotypes
+==========
+a = Flowers in shades of red
+A = Flowers in shades of yellow
+b = Leaves ovate
+B = Leaves broad
+C = Calyx long
+c = Calyx short
+d = Corolla in shades of pink
+D = Corolla in shades of orange
+E = Seeds round
+e = Seeds oblong
+F = Seeds white
+f = Seeds black
