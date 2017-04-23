@@ -1,0 +1,8 @@
+Phenotypes
+==========
+A = 4 incisors
+a = 4 incisors
+B = Canine tooth large
+b = No canine tooth
+D =
+d = Nasal bones large
