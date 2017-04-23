@@ -1,0 +1,24 @@
+Phenotypes
+==========
+
+A = long wings
+b = short bill
+B = long bill
+C = iridescent plumage
+c = no iridescent plumage
+d = hight in-flight metabolism
+D = slow in-flight metabolism
+E = Tail absent
+e = Tail present
+F = tail curve
+f = Tail straight
+G = Large pedipalps
+g = Lacks pedipalps
+H = short wings
+h = long wings
+i = short bill
+I = long bill
+J = iridescent plumage
+j = no iridescent plumage
+k = hight in-flight metabolism
+K = slow in-flight metabolism
