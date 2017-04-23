@@ -16,7 +16,8 @@ def main():
     phenotypes = getPhenotypes(text)
 
     #Generate whole analysis
-    mendelianResult = generateGTmatrix(sys.argv[2], sys.argv[3], phenotypes)
+    if phenotypes != None:
+        mendelianResult = generateGTmatrix(sys.argv[2], sys.argv[3], phenotypes)
 
 
 main()
