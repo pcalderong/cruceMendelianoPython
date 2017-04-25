@@ -2,6 +2,7 @@ import sys
 from utils import readFile
 from mendelian import getPhenotypes
 from mendelian import generateGTmatrix
+from mendelian import createMatrixPhenotype
 
 def main():
     # Arguments from command line:
@@ -17,7 +18,8 @@ def main():
 
     #Generate whole analysis
     if phenotypes != None:
-        mendelianResult = generateGTmatrix(sys.argv[2], sys.argv[3], phenotypes)
+        generateGTmatrix(sys.argv[2], sys.argv[3], phenotypes)
+
 
 
 main()
