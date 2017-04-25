@@ -1,6 +1,7 @@
 from utils import createGameteAux
 from utils import sort
 
+
 # Calls to Aux - Creates gametes for crossing process
 def createGamete(source):
    return createGameteAux(source)
@@ -12,7 +13,9 @@ def generateGTmatrix(father, mother, phenotypes):
     totalCount = len(gameteA)*len(gameteB)
     matrix = createTable(gameteA, gameteB)
     listGenotypes = analyzeData(matrix)
-    generateGenotypes(totalCount, listGenotypes, phenotypes)
+    generateGenotypes(totalCount, listGenotypes)
+    createMatrixPhenotype(listGenotypes, phenotypes, totalCount)
+    return listGenotypes
 
 # Creates mendelian table with results based on gameteA and gameteB
 def createTable(gameteA, gameteB):
@@ -47,14 +50,13 @@ def analyzeData(matrix):
     return results
 
 # Displays analysis for genotype
-def generateGenotypes(n, listGenotypes, phenotypes):
+def generateGenotypes(n, listGenotypes):
     for v in listGenotypes:
         result = (listGenotypes[v] * 100) / n
         print "Genotype for {} is {}/{} or {}%".format(v, listGenotypes[v], n, result)
-        analizePhenotypes(v, phenotypes)
 
 # Generates Phenotypes analysis for EACH genotype
-def analizePhenotypes(genotype, phenotype):
+def analizePhenotypes(genotype, qty, phenotype, totalCount):
     last = ""
     result = ""
     for g in genotype:
@@ -62,7 +64,7 @@ def analizePhenotypes(genotype, phenotype):
             result += phenotype[g]
             result += " - "
             last = g
-    print result + "\n"
+    print "{}/{} or {}% : {}\n".format(qty, totalCount,(qty*100)/totalCount, result)
     return result
 
 # Reads each line for the file, and sets a list with the corresponding characteristics.
@@ -86,3 +88,36 @@ def getPhenotypes(text):
                 print "Phenotype description for {} is empty".format(l[:1])
                 return None
     return hashPhenotypes
+
+def createMatrixPhenotype(genotype, phenotypesFeatures, totalCount):
+    matrixPhenotype = {}
+    for g in genotype:
+        result = phenotypeExists(g, matrixPhenotype)
+        if result:
+            matrixPhenotype[result] += genotype[g]
+        else:
+            matrixPhenotype[g] = genotype[g]
+
+    for p in matrixPhenotype:
+        analizePhenotypes(p,matrixPhenotype[p], phenotypesFeatures, totalCount)
+    return matrixPhenotype
+
+def phenotypeExists(genotype, matrix):
+    stringGen = ""
+    i = 0
+    for key in matrix:
+        flag = True
+        for g in range(len(genotype)):
+            if genotype[g] != key[g] and isEven(i):
+                flag = False
+                break
+            i+=1
+        if flag:
+            stringGen = key
+    return stringGen
+
+def isEven(value):
+    if value % 2 == 0:
+        return True
+    else:
+        return False
