@@ -30,7 +30,7 @@ class Handler:
         print("Hello World!")
 
 builder = Gtk.Builder()
-builder.add_from_file("Proyecto0-a.glade")
+builder.add_from_file("MendelianUI.glade")
 builder.connect_signals(Handler())
 
 window = builder.get_object("winMendelian")
