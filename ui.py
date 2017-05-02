@@ -8,6 +8,7 @@ from mendelian import createPossibleGen
 from mendelian import getSinglePhenotype
 from utils import readFile
 from mendelian import getPhenotypesFromFile
+from utils import generateHexColor
 
 class mendelianWin:
 
@@ -20,6 +21,16 @@ class mendelianWin:
         builder.add_from_file("MendelianUI.glade")
         builder.connect_signals(self)
         window = builder.get_object("winMendelian")
+        self.boxListG = builder.get_object("boxListG")
+        self.boxListP = builder.get_object("boxListP")
+        self.layoutMatrix = builder.get_object("fixedMatrix")
+        self.genotype = ""
+        self.phenotype = ""
+        self.totalCount = 0
+        self.genoColor = {}
+        self.matrix = ""
+        self.gameteA = ""
+        self.gameteB = ""
 
         self.boxAllels = builder.get_object("boxAllels")
         self.labelAllel = builder.get_object("lblAllel")
@@ -90,11 +101,15 @@ class mendelianWin:
 
     def onResponseDialog(self, widget, response):
         if response == 2:
-            print self.fileName
             self.fileChooserButton.set_current_folder("/files")
             text = readFile(self.fileName)
             phenotypes = getPhenotypesFromFile(text)
-            self.showPhenotypes(phenotypes)
+            if not phenotypes:
+                self.restartUI(True)
+                self.dialog.show()
+
+            else:
+                self.showPhenotypes(phenotypes)
         else:
             print "No file"
 
@@ -106,7 +121,7 @@ class mendelianWin:
         for c in self.boxMom:
             self.boxMom.remove(c)
 
-    def restartUI(self):
+    def restartUI(self, addValue):
         self.labelsAllel = []
         self.entriesDominant = []
         self.entriesDescriptionD = []
@@ -122,6 +137,10 @@ class mendelianWin:
             self.boxDescriptionD.remove(c)
         for c in self.boxDescriptionR:
             self.boxDescriptionR.remove(c)
+        if addValue:
+            self.addLine()
+
+    def addLine(self):
         labelAllelNew = Gtk.Label()
         self.labelsAllel.append(labelAllelNew)
         self.boxAllels.pack_start(labelAllelNew, True, True, 1)
@@ -155,7 +174,7 @@ class mendelianWin:
         self.spin.set_value(1)
 
     def showPhenotypes(self, phenotypes):
-        self.restartUI()
+        self.restartUI(False)
         for i in phenotypes:
             if i.isupper():
                 labelAllelNew = Gtk.Label()
@@ -194,21 +213,16 @@ class mendelianWin:
                 self.boxDescriptionR.pack_start(entryDescriptionR, True, True, 1)
                 entryDescriptionR.show()
         total = len(phenotypes)
-        self.entryDominantA.hide()
-        self.entryDescriptionDA.hide()
-        self.labelAllel.hide()
-        self.entriesDescriptionR.hide()
-        self.entriesDescriptionD.hide()
         self.spin.set_value(total/2)
 
-    def onOkPressed(self, widget):
-        self.dialog.hide()
+    def onOkpressed(self, widget):
+        widget.hide()
 
     def onClearClicked(self, widget):
         self.restartRadioB()
-        self.restartUI()
+        self.restartUI(True)
 
-    def onExecutePressefd(self, button):
+    def onExecutePressed(self, button):
         getMom = ""
         getDad = ""
         self.listRadioMom.pop(0)
@@ -220,7 +234,82 @@ class mendelianWin:
             if gD.get_active():
                 getDad = gD.get_label()
         hashCharacteristics = self.getCharacteristics()
-        main(getDad, getMom, hashCharacteristics, False)
+        result = main(getDad, getMom, hashCharacteristics)
+        self.generateResultsView(result[0], result[1], result[2], result[3], result[4], result[5])
+
+    def onTogglePercentage(self, button):
+        self.generateGenotype(button.get_active())
+
+
+    def generateGenotype(self, percentage):
+        for c in self.boxListG:
+            self.boxListG.remove(c)
+        for g in self.genotype:
+            value = self.genotype[g]
+            if percentage:
+                value = (value*100)/float(self.totalCount)
+                value = str(value)+"%"
+            else:
+                value = str(value)
+            label = Gtk.Label(g+" : "+value)
+            self.boxListG.pack_start(label, True, True, 0)
+            label.show()
+    def genColors(self):
+        self.genoColor = {}
+        for g in self.genotype:
+            self.genoColor[g] = generateHexColor()
+
+    def generateMatrix(self, color):
+        x = 100
+        gA = 0
+        lenString = len(self.gameteB[0])
+        ex = " "
+        for i in range(lenString):
+            ex += " "
+        for g in self.gameteB:
+            label = Gtk.Label(g + ex)
+            self.layoutMatrix.put(label, x, 0)
+            label.show()
+            x += 100
+        y = 35
+        for row in self.matrix:
+            x = 0
+            label = Gtk.Label(self.gameteA[gA])
+            self.layoutMatrix.put(label, x, y)
+            label.show()
+            x += 100
+            for column in row:
+                label = Gtk.Label()
+                if color:
+                    label.set_markup("<span color='"+self.genoColor[column]+"'>"+column+"</span>")
+                else:
+                    label.set_text(column)
+                self.layoutMatrix.put(label, x, y)
+                label.show()
+                x += 100
+            y += 15
+            gA += 1
+
+    def onColorChange(self, button):
+        self.generateMatrix(button.get_active())
+
+    def generateResultsView(self, genotypes, phenotypes, matrix, total, gameteA, gameteB):
+        self.genotype = genotypes
+        self.phenotype = phenotypes
+        self.totalCount = total
+        self.gameteA = gameteA
+        self.gameteB = gameteB
+        self.matrix =matrix
+        self.genColors()
+        self.generateGenotype(False)
+        self.generateMatrix(False)
+        for c in self.boxListP:
+            self.boxListP.remove(c)
+        for p in phenotypes:
+            label = Gtk.Label(p)
+            self.boxListP.pack_start(label, True, True, 0)
+            label.show()
+
 
     def getCharacteristics(self):
         hashCharacteristics = {}

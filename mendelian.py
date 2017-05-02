@@ -15,8 +15,8 @@ def generateGTmatrix(father, mother, phenotypes):
     matrix = createTable(gameteA, gameteB)
     listGenotypes = analyzeData(matrix)
     generateGenotypes(totalCount, listGenotypes)
-    createMatrixPhenotype(listGenotypes, phenotypes, totalCount)
-    return listGenotypes
+    phenotypes = createMatrixPhenotype(listGenotypes, phenotypes, totalCount)
+    return [listGenotypes, phenotypes, matrix, totalCount, gameteA, gameteB]
 
 # Creates mendelian table with results based on gameteA and gameteB
 def createTable(gameteA, gameteB):
@@ -60,7 +60,7 @@ def generateGenotypes(n, listGenotypes):
 def analizePhenotypes(genotype, qty, phenotype, totalCount):
     result = getSinglePhenotype(genotype, phenotype)
     print "{}/{} or {}% : {}\n".format(qty, totalCount,(qty*100)/totalCount, result)
-    return result
+    return str(qty)+" / "+str(totalCount)+" or "+str((qty*100)/totalCount)+"% : "+result
 
 def getSinglePhenotype(genotype, phenotype):
     last = ""
@@ -70,7 +70,7 @@ def getSinglePhenotype(genotype, phenotype):
             result += phenotype[g]
             result += " - "
             last = g
-    return result
+    return result[:-3]
 # Reads each line for the file, and sets a list with the corresponding characteristics.
 # Handle as a hash table
 def getPhenotypesFromFile(text):
@@ -79,10 +79,10 @@ def getPhenotypesFromFile(text):
         if "Phenotypes" not in l and "===" not in l:
             if l[:1] in hashPhenotypes:
                 print "Phenotype {} is already on the file".format(l[:1])
-                return None
+                return False
             elif not l[:1].isalpha():
                 print "Phenotype {} is not a letter".format(l[:1])
-                return None
+                return False
             elif len(l[4:]) > 3:
                 if "\n" in l[4:]:
                     hashPhenotypes[l[:1]] = l[4:-1]
@@ -90,7 +90,7 @@ def getPhenotypesFromFile(text):
                     hashPhenotypes[l[:1]] = l[4:]
             else:
                 print "Phenotype description for {} is empty".format(l[:1])
-                return None
+                return False
     return hashPhenotypes
 
 def createMatrixPhenotype(genotype, phenotypesFeatures, totalCount):
@@ -101,10 +101,10 @@ def createMatrixPhenotype(genotype, phenotypesFeatures, totalCount):
             matrixPhenotype[result] += genotype[g]
         else:
             matrixPhenotype[g] = genotype[g]
-
+    result = []
     for p in matrixPhenotype:
-        analizePhenotypes(p,matrixPhenotype[p], phenotypesFeatures, totalCount)
-    return matrixPhenotype
+         result.append(analizePhenotypes(p,matrixPhenotype[p], phenotypesFeatures, totalCount))
+    return result
 
 def phenotypeExists(genotype, matrix):
     stringGen = ""
