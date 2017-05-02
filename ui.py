@@ -232,19 +232,22 @@ class mendelianWin:
             self.layoutMatrix.remove(l)
 
     def onExecutePressed(self, button):
-        getMom = ""
-        getDad = ""
-        self.listRadioMom.pop(0)
-        self.listRadioDad.pop(0)
-        for gM in self.listRadioMom:
-            if gM.get_active():
-                getMom = gM.get_label()
-        for gD in self.listRadioDad:
-            if gD.get_active():
-                getDad = gD.get_label()
-        hashCharacteristics = self.getCharacteristics()
-        result = main(getDad, getMom, hashCharacteristics)
-        self.generateResultsView(result[0], result[1], result[2], result[3], result[4], result[5])
+        if len(self.listRadioMom) > 0:
+            getMom = ""
+            getDad = ""
+            self.listRadioMom.pop(0)
+            self.listRadioDad.pop(0)
+            for gM in self.listRadioMom:
+                if gM.get_active():
+                    getMom = gM.get_label()
+            for gD in self.listRadioDad:
+                if gD.get_active():
+                    getDad = gD.get_label()
+            hashCharacteristics = self.getCharacteristics()
+            result = main(getDad, getMom, hashCharacteristics)
+            self.generateResultsView(result[0], result[1], result[2], result[3], result[4], result[5])
+        else:
+            self.dialog.show()
 
     def onTogglePercentage(self, button):
         self.generateGenotype(button.get_active())
@@ -263,13 +266,15 @@ class mendelianWin:
             label = Gtk.Label(g+" : "+value)
             self.boxListG.pack_start(label, True, True, 0)
             label.show()
+
     def genColors(self):
         self.genoColor = {}
         for g in self.genotype:
             self.genoColor[g] = generateHexColor()
 
     def generateMatrix(self, color):
-
+        for l in self.layoutMatrix:
+            self.layoutMatrix.remove(l)
         x = 100
         gA = 0
         sum = 1
