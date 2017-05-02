@@ -66,7 +66,7 @@ def getSinglePhenotype(genotype, phenotype):
     last = ""
     result = ""
     for g in genotype:
-        if last.upper() != g.upper():
+        if last.upper() != g.upper() and g != '\n':
             result += phenotype[g]
             result += " - "
             last = g
@@ -134,7 +134,6 @@ def createPossibleGen(list):
                 newCombination.append(c + l.upper())
                 newCombination.append(c + l.lower())
             combination = newCombination
-    print combination
     return combination
 
 def isEven(value):

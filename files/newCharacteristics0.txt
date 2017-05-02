@@ -1,0 +1,8 @@
+Phenotypes
+==========
+A = green eyes
+a = brown eyes
+C = bold
+B = black hair
+c = no bold
+b = blond hair

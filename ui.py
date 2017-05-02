@@ -107,7 +107,6 @@ class mendelianWin:
             if not phenotypes:
                 self.restartUI(True)
                 self.dialog.show()
-
             else:
                 self.showPhenotypes(phenotypes)
         else:
@@ -141,6 +140,7 @@ class mendelianWin:
             self.addLine()
 
     def addLine(self):
+        self.spin.set_value(1)
         labelAllelNew = Gtk.Label()
         self.labelsAllel.append(labelAllelNew)
         self.boxAllels.pack_start(labelAllelNew, True, True, 1)
@@ -171,7 +171,7 @@ class mendelianWin:
         self.entriesDescriptionR.append(entryDescriptionR)
         self.boxDescriptionR.pack_start(entryDescriptionR, True, True, 1)
         entryDescriptionR.show()
-        self.spin.set_value(1)
+
 
     def showPhenotypes(self, phenotypes):
         self.restartUI(False)
@@ -221,6 +221,15 @@ class mendelianWin:
     def onClearClicked(self, widget):
         self.restartRadioB()
         self.restartUI(True)
+        self.restartResults()
+
+    def restartResults(self):
+        for c in self.boxListG:
+            self.boxListG.remove(c)
+        for c in self.boxListP:
+            self.boxListP.remove(c)
+        for l in self.layoutMatrix:
+            self.layoutMatrix.remove(l)
 
     def onExecutePressed(self, button):
         getMom = ""
@@ -260,24 +269,27 @@ class mendelianWin:
             self.genoColor[g] = generateHexColor()
 
     def generateMatrix(self, color):
+
         x = 100
         gA = 0
+        sum = 1
         lenString = len(self.gameteB[0])
         ex = " "
         for i in range(lenString):
             ex += " "
+            sum+=sum
         for g in self.gameteB:
             label = Gtk.Label(g + ex)
             self.layoutMatrix.put(label, x, 0)
             label.show()
-            x += 100
+            x += 75+sum
         y = 35
         for row in self.matrix:
             x = 0
             label = Gtk.Label(self.gameteA[gA])
             self.layoutMatrix.put(label, x, y)
             label.show()
-            x += 100
+            x += 75 + sum
             for column in row:
                 label = Gtk.Label()
                 if color:
@@ -286,7 +298,7 @@ class mendelianWin:
                     label.set_text(column)
                 self.layoutMatrix.put(label, x, y)
                 label.show()
-                x += 100
+                x += 75 + sum
             y += 15
             gA += 1
 
