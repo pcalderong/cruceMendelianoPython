@@ -98,6 +98,14 @@ class mendelianWin:
         else:
             print "No file"
 
+    def restartRadioB(self):
+        self.listRadioDad = []
+        self.listRadioMom = []
+        for c in self.boxDad:
+            self.boxDad.remove(c)
+        for c in self.boxMom:
+            self.boxMom.remove(c)
+
     def restartUI(self):
         self.labelsAllel = []
         self.entriesDominant = []
@@ -114,6 +122,37 @@ class mendelianWin:
             self.boxDescriptionD.remove(c)
         for c in self.boxDescriptionR:
             self.boxDescriptionR.remove(c)
+        labelAllelNew = Gtk.Label()
+        self.labelsAllel.append(labelAllelNew)
+        self.boxAllels.pack_start(labelAllelNew, True, True, 1)
+        labelAllelNew.show()
+
+        entryDominant = Gtk.Entry()
+        entryDominant.set_width_chars(1)
+        entryDominant.set_max_length(1)
+        entryDominant.connect("changed", self.onEntryChanged, len(self.entriesDominant))
+        self.entriesDominant.append(entryDominant)
+        self.boxDominant.pack_start(entryDominant, True, True, 1)
+        entryDominant.show()
+
+        entryDescriptionD = Gtk.Entry()
+        self.entriesDescriptionD.append(entryDescriptionD)
+        self.boxDescriptionD.pack_start(entryDescriptionD, True, True, 1)
+        entryDescriptionD.show()
+
+        entryRecesive = Gtk.Entry()
+        entryRecesive.set_width_chars(1)
+        entryRecesive.set_max_length(1)
+        entryRecesive.set_editable(False)
+        self.entriesRecesive.append(entryRecesive)
+        self.boxRecesive.pack_start(entryRecesive, True, True, 1)
+        entryRecesive.show()
+
+        entryDescriptionR = Gtk.Entry()
+        self.entriesDescriptionR.append(entryDescriptionR)
+        self.boxDescriptionR.pack_start(entryDescriptionR, True, True, 1)
+        entryDescriptionR.show()
+        self.spin.set_value(1)
 
     def showPhenotypes(self, phenotypes):
         self.restartUI()
@@ -165,9 +204,15 @@ class mendelianWin:
     def onOkPressed(self, widget):
         self.dialog.hide()
 
-    def onExecutePressed(self, button):
+    def onClearClicked(self, widget):
+        self.restartRadioB()
+        self.restartUI()
+
+    def onExecutePressefd(self, button):
         getMom = ""
         getDad = ""
+        self.listRadioMom.pop(0)
+        self.listRadioDad.pop(0)
         for gM in self.listRadioMom:
             if gM.get_active():
                 getMom = gM.get_label()
@@ -196,16 +241,11 @@ class mendelianWin:
 
     def onGenParentsPressed(self, button):
         labels = getAllels(self.labelsAllel)
-        self.listRadioDad = []
-        self.listRadioMom = []
+        self.restartRadioB()
         hashCharacteristics = {}
         for i in range(len(self.entriesDominant)):
             hashCharacteristics[self.entriesDominant[i].get_text()] = self.entriesDescriptionD[i].get_text()
             hashCharacteristics[self.entriesRecesive[i].get_text()] = self.entriesDescriptionR[i].get_text()
-        for c in self.boxDad:
-            self.boxDad.remove(c)
-        for c in self.boxMom:
-            self.boxMom.remove(c)
         self.combinationGenotypes = createPossibleGen(labels)
         lblMom = Gtk.Label("Mom")
         lblDad = Gtk.Label("Dad")
