@@ -38,7 +38,11 @@ def crossingValues(prefix, list):
 def readFile(fileName):
     test = open(fileName)
     text = [line.rstrip('\n') for line in open(fileName, 'r')]
-    print test
-    return test
+    return text
 
-
+def getAllels(labels):
+    result = []
+    for l in labels:
+        stringGen = l.get_text()
+        result.append(stringGen)
+    return result

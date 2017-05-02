@@ -1,5 +1,6 @@
 from utils import createGameteAux
 from utils import sort
+# from utils import createPossibleGenAux
 
 
 # Calls to Aux - Creates gametes for crossing process
@@ -57,6 +58,11 @@ def generateGenotypes(n, listGenotypes):
 
 # Generates Phenotypes analysis for EACH genotype
 def analizePhenotypes(genotype, qty, phenotype, totalCount):
+    result = getSinglePhenotype(genotype, phenotype)
+    print "{}/{} or {}% : {}\n".format(qty, totalCount,(qty*100)/totalCount, result)
+    return result
+
+def getSinglePhenotype(genotype, phenotype):
     last = ""
     result = ""
     for g in genotype:
@@ -64,12 +70,10 @@ def analizePhenotypes(genotype, qty, phenotype, totalCount):
             result += phenotype[g]
             result += " - "
             last = g
-    print "{}/{} or {}% : {}\n".format(qty, totalCount,(qty*100)/totalCount, result)
     return result
-
 # Reads each line for the file, and sets a list with the corresponding characteristics.
 # Handle as a hash table
-def getPhenotypes(text):
+def getPhenotypesFromFile(text):
     hashPhenotypes = {}
     for l in text:
         if "Phenotypes" not in l and "===" not in l:
@@ -115,6 +119,23 @@ def phenotypeExists(genotype, matrix):
         if flag:
             stringGen = key
     return stringGen
+
+def createPossibleGen(list):
+    combination = []
+    for l in list:
+        if len(combination) == 0:
+            combination.append(l)
+            combination.append(l.upper())
+            combination.append(l.lower())
+        else:
+            newCombination = []
+            for c in combination:
+                newCombination.append(c + l)
+                newCombination.append(c + l.upper())
+                newCombination.append(c + l.lower())
+            combination = newCombination
+    print combination
+    return combination
 
 def isEven(value):
     if value % 2 == 0:
